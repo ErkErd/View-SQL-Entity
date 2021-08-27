@@ -1,0 +1,164 @@
+function b (){
+
+	var str = $("#Aciklama").val();$("#Aciklama").val(""); 
+	var pre  = "alter table /*Table name*/ add "
+	var final;
+	var trimmedArrelement;
+	var arr = str.split("\n");
+	var arrwp= [];//lazım olursa
+	for(i=0;i<arr.length;i++){
+	trimmedArrelement = arr[i].trim();
+		if(trimmedArrelement.startsWith("public"))    {
+			trimmedArrelement.replace("  "," ");
+			if(trimmedArrelement.split(" ")[1] == "int" ){
+			    final = pre+"  "+trimmedArrelement.split(" ")[2]+"  int not null" ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "int?" ){
+			    final = pre+"  "+trimmedArrelement.split(" ")[2]+"  int null" ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "string" ){
+			    final = pre+" "+trimmedArrelement.split(" ")[2]+"  varchar(max) null" ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "decimal?" ){
+			    final = pre+"  "+trimmedArrelement.split(" ")[2]+" bit null" ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "decimal" ){
+			    final = pre+"  "+trimmedArrelement.split(" ")[2]+"  bit not null" ;
+			}
+			
+			$("#Aciklama").val($("#Aciklama").val()+"\n"+final)
+			arrwp.push(final);
+			
+		}
+		
+			
+	}
+
+}
+
+		
+		
+		
+		
+		
+		
+		
+		
+function c (){
+
+	var str = $("#IsitmaSekli").val();$("#IsitmaSekli").val(""); 
+	var pre  = "alter table /*Table name*/ add "
+	var final;
+	var trimmedArrelement;
+	var arr = str.split("\n");
+	var arrwp= [];//lazım olursa
+	for(i=0;i<arr.length;i++){
+	trimmedArrelement = arr[i].trim();
+		if(trimmedArrelement.startsWith("public"))    {
+			trimmedArrelement.replace("  "," ");
+			final = "";
+			if(trimmedArrelement.split(" ")[1] == "int" ){
+			    final = "  "+trimmedArrelement.split(" ")[2]+"  [int] not null," ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "int?" ){
+			    final = "  "+trimmedArrelement.split(" ")[2]+"  [int] null," ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "string" ){
+			    final = " "+trimmedArrelement.split(" ")[2]+"  varchar(max) null," ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "decimal?" ){
+			    final = "  "+trimmedArrelement.split(" ")[2]+" [decimal(12, 2)] null," ;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "decimal" ){
+			    final = "  "+trimmedArrelement.split(" ")[2]+"  [decimal(12, 2)] not null," ;
+			}
+            else if(trimmedArrelement.split(" ")[1] == "DateTime" ){
+			    final = "  "+trimmedArrelement.split(" ")[2]+"  [DateTime] not null," ;
+			}
+            else if(trimmedArrelement.split(" ")[1] == "DateTime?" ){
+			    final =  "  "+trimmedArrelement.split(" ")[2]+"  [DateTime] null," ;
+			}
+			
+			$("#IsitmaSekli").val($("#IsitmaSekli").val()+"\n"+final)
+			arrwp.push(final);
+			
+		}
+		
+			
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sql den entity e cevırme
+function d (){
+
+	var str = $("#IsitmaSekli").val();$("#IsitmaSekli").val(""); 
+	var pre  = "public "
+    var post = "{get;set;}"
+	var final;
+	var trimmedArrelement;
+	var arr = str.split("\n");
+	var arrwp= [];//lazım olursa
+
+	for(i=0;i<arr.length;i++){
+	trimmedArrelement = arr[i].trim();
+trimmedArrelement=trimmedArrelement.replaceAll('[','');trimmedArrelement=trimmedArrelement.replaceAll(']','');
+		trimmedArrelement=trimmedArrelement.replaceAll("\t","");
+
+			trimmedArrelement=trimmedArrelement.replaceAll("  "," ");
+trimmedArrelement = trimmedArrelement.trim();
+			final = "";
+console.log(trimmedArrelement);
+			if(trimmedArrelement.split(" ")[1] == "int" && trimmedArrelement.split(" ")[2] != "NOT" ){
+			    final = pre +" int? "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+			else if(trimmedArrelement.split(" ")[1] == "int"  && trimmedArrelement.split(" ")[2] == "NOT"  ){
+			    final = pre +" int "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+			else if(trimmedArrelement.split(" ")[1].startsWith("varchar") ){
+			    final = pre +" string "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+			else if(trimmedArrelement.split(" ")[1].startsWith("decimal") && trimmedArrelement.split(" ")[4] != "NOT" ){
+			    final = pre +" decimal? "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+			else if(trimmedArrelement.split(" ")[1].startsWith("decimal")  && trimmedArrelement.split(" ")[4] == "NOT"  ){
+			    final = pre +" decimal "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+            else if(trimmedArrelement.split(" ")[1] == "datetime" && trimmedArrelement.split(" ")[2] == "NOT" ){
+			    final = pre +" DateTime "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+             else if(trimmedArrelement.split(" ")[1] == "datetime" && trimmedArrelement.split(" ")[2] != "NOT" ){
+			    final = pre +" DateTime? "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+             else if(trimmedArrelement.split(" ")[1] == "bit" ){
+			    final = pre +" bool "+trimmedArrelement.split(" ")[0]+""+post;
+			}
+			console.log(final);
+			$("#IsitmaSekli").val($("#IsitmaSekli").val()+"\n"+final)
+			arrwp.push(final);
+			
+		
+		
+			
+	}
+
+}
